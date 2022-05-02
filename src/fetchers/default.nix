@@ -8,7 +8,7 @@
   b = builtins;
   callFetcher = file: args: callPackageDream file args;
 in rec {
-  fetchers' = (lib.genAttrs (dlib.dirNames ../.) (name: ./. + "/${name}"))
+  fetchers' = (lib.genAttrs (dlib.dirNames ./.) (name: ./. + "/${name}"))
     // (config.fetchers or {});
 
   fetchers = lib.mapAttrs (name: pathOrModule: callFetcher pathOrModule {}) fetchers';
