@@ -65,7 +65,10 @@
         overridesDirs = args.overridesDirs ++ config'.overridesDirs;
       };
 
-    dlib = import ./lib {inherit lib; config = finalConfig;};
+    dlib = import ./lib {
+      inherit lib;
+      config = finalConfig;
+    };
 
     allPkgs = makeNixpkgs pkgs systems;
 
@@ -78,7 +81,10 @@
     makeFlakeOutputs = mArgs:
       makeFlakeOutputsFunc
       (
-        {inherit dlib pkgs systems; config = finalConfig;}
+        {
+          inherit dlib pkgs systems;
+          config = finalConfig;
+        }
         // mArgs
       );
 
@@ -113,7 +119,8 @@
     dream2nixFor = forAllSystems (
       dream2nixForSystem
       dlib
-      finalConfig);
+      finalConfig
+    );
 
     getInvalidationHash = project:
       dlib.calcInvalidationHash {

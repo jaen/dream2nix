@@ -32,23 +32,28 @@
     };
   };
 
-  extendedBuilders = l.mapAttrs (name: subsystem:
-      let
-        default      = subsystem.default or null;
-        instantiated = l.mapAttrsToList
-            (name: builder:
-              let
-                value = callPackageDream builder {};
-              in
-                (if default == builder
-                   then [ { inherit name value; } { name = "default"; inherit value; } ]
-                   else [ { inherit name value; } ]))
-            subsystem;
-      in
-        l.listToAttrs (l.flatten instantiated))
-    config.builders or {};
+  extendedBuilders = l.mapAttrs (name: subsystem: let
+    default = subsystem.default or null;
+    instantiated =
+      l.mapAttrsToList
+      (name: builder: let
+        value = callPackageDream builder {};
+      in (
+        if default == builder
+        then [
+          {inherit name value;}
+          {
+            name = "default";
+            inherit value;
+          }
+        ]
+        else [{inherit name value;}]
+      ))
+      subsystem;
+  in
+    l.listToAttrs (l.flatten instantiated))
+  config.builders or {};
 
   allBuilders = builtinBuilders // extendedBuilders;
 in
   allBuilders
-  

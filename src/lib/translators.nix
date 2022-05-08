@@ -7,7 +7,8 @@
 
   # INTERNAL
 
-  subsystems = (l.genAttrs (dlib.dirNames ../translators) (subsystem: ../translators + "/${subsystem}"))
+  subsystems =
+    (l.genAttrs (dlib.dirNames ../translators) (subsystem: ../translators + "/${subsystem}"))
     // (config.translators or {});
 
   translatorTypes = ["impure" "ifd" "pure"];
@@ -18,8 +19,11 @@
     (subsystemName: subsystem: let
       availableTypes =
         l.filter
-        (type: if l.isPath subsystem  then (l.pathExists "${subsystem}/${type}")
-          else if l.isAttrs subsystem then subsystem ? ${type}
+        (type:
+          if l.isPath subsystem
+          then (l.pathExists "${subsystem}/${type}")
+          else if l.isAttrs subsystem
+          then subsystem ? ${type}
           else throw "Translator can be a path or an attrset, but instead was ${l.typeOf subsystem}")
         translatorTypes;
 
@@ -36,7 +40,7 @@
           {}
           (l.attrValues translatorsForTypes);
       })
-      subsystems;
+    subsystems;
 
   # flat list of all translators sorted by priority (pure translators first)
   translatorsList = let
@@ -68,10 +72,13 @@
 
   # attrset of: subsystem -> translator-type -> translator
   translators = mkTranslatorsSet (
-    # subsystem can be a path or an attrset 
+    # subsystem can be a path or an attrset
     subsystemName: subsystem: type: let
-      translatorNames = if l.isPath subsystem then dlib.dirNames "${subsystem}/${type}"
-        else if l.isAttrs subsystem then l.attrNames (subsystem.${type} or {})
+      translatorNames =
+        if l.isPath subsystem
+        then dlib.dirNames "${subsystem}/${type}"
+        else if l.isAttrs subsystem
+        then l.attrNames (subsystem.${type} or {})
         # TODO: it would be sensible for translator leafs to be either functions or paths
         else throw "Translator can be a path or an attrset, but instead was ${l.typeOf subsystem}";
 
@@ -83,10 +90,14 @@
           subsystemName
           type
           translatorName
-          (     if l.isPath subsystem then (import "${subsystem}/${type}/${translatorName}")
-           else if l.isAttrs subsystem then subsystem.${type}.${translatorName}
-           # TODO: it would be sensible for translator leafs to be either functions or paths
-           else throw "Translator can be a path or an attrset, but instead was ${l.typeOf subsystem}")
+          (
+            if l.isPath subsystem
+            then (import "${subsystem}/${type}/${translatorName}")
+            else if l.isAttrs subsystem
+            then subsystem.${type}.${translatorName}
+            # TODO: it would be sensible for translator leafs to be either functions or paths
+            else throw "Translator can be a path or an attrset, but instead was ${l.typeOf subsystem}"
+          )
           {});
     in
       l.filterAttrs

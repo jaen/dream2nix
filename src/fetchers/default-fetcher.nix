@@ -26,6 +26,8 @@
         then
           if l.isStorePath (l.concatStringsSep "/" (l.take 4 (l.splitString "/" source.path)))
           then source.path
+          else if l.isStorePath (config.rootPath + source.path)
+          then config.rootPath + source.path
           else if name == source.rootName && version == source.rootVersion
           then throw "source for ${name}@${version} is referencing itself"
           else "${overriddenSources."${source.rootName}"."${source.rootVersion}"}/${source.path}"

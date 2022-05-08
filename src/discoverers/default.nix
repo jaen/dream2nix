@@ -76,21 +76,28 @@
   in
     settingsApplied;
 
-  makeDiscoverer = (name: subsystem:
-    let
-      constructor = (     if l.isPath subsystem     then (import subsystem)
-                     else if l.isFunction subsystem then subsystem
-                     else throw "Discoverer can be a path or a function, but instead was ${l.typeOf subsystem}");
-      discoverer  = constructor { inherit dlib lib; subsystem = name; }; 
+  makeDiscoverer = (
+    name: subsystem: let
+      constructor = (
+        if l.isPath subsystem
+        then (import subsystem)
+        else if l.isFunction subsystem
+        then subsystem
+        else throw "Discoverer can be a path or a function, but instead was ${l.typeOf subsystem}"
+      );
+      discoverer = constructor {
+        inherit dlib lib;
+        subsystem = name;
+      };
     in
       discoverer
   );
 
-  subsystems = (l.genAttrs (dlib.dirNames ./.) (subsystem: ./. + "/${subsystem}"))
+  subsystems =
+    (l.genAttrs (dlib.dirNames ./.) (subsystem: ./. + "/${subsystem}"))
     // (config.discoverers or {});
 
   discoverers = l.mapAttrs makeDiscoverer subsystems;
-
   # discoverers = if subsystems ? ruby
   #   then l.mapAttrs makeDiscoverer subsystems
   #   else let _ = l.traceValSeq config; in throw "WTF MATE";
