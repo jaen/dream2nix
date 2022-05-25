@@ -9,11 +9,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1648332543,
-        "narHash": "sha256-9FWmFNLCOp4y0I8Yb4GvgGXxtDq3nBDSTI9qyCi2LJ4=",
+        "lastModified": 1646360966,
+        "narHash": "sha256-fJ/WHSU45bMJRDqz9yA3B2lwXtW5DKooU+Pzn13GyZI=",
         "owner": "kamadorueda",
         "repo": "alejandra",
-        "rev": "5cbb3486c7959646f452830c0a223edc5db5b951",
+        "rev": "511c3f6a88b6964e1496fb6f441f4ae5e58bd3ea",
         "type": "github"
       },
       "original": {
@@ -52,7 +52,7 @@
       },
       "locked": {
         "lastModified": 1653448079,
-        "narHash": "sha256-M9aDUL0WFspLimNVUOamMhNqafweyH2axoHXVyfcj/Q=",
+        "narHash": "sha256-gNES/jaWLnVePL/m5ZZBxV4emA8nwmDzxallaUQSeh0=",
         "type": "git",
         "url": "file:///home/jaen/Projects/nix/dream2nix"
       },
@@ -80,11 +80,11 @@
     "flakeCompat": {
       "flake": false,
       "locked": {
-        "lastModified": 1648199409,
-        "narHash": "sha256-JwPKdC2PoVBkG6E+eWw3j6BMR6sL3COpYWfif7RVb8Y=",
+        "lastModified": 1641205782,
+        "narHash": "sha256-4jY7RCWUoZ9cKD8co0/4tFARpWB+57+r1bLLvXNJliY=",
         "owner": "edolstra",
         "repo": "flake-compat",
-        "rev": "64a525ee38886ab9028e6f61790de0832aa3ef03",
+        "rev": "b7547d3eed6f32d06102ead8991ec52ab0a4f1a7",
         "type": "github"
       },
       "original": {
@@ -199,7 +199,24 @@
     },
     "root": {
       "inputs": {
-        "dream2nix": "dream2nix"
+        "dream2nix": "dream2nix",
+        "src": "src"
+      }
+    },
+    "src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1653270844,
+        "narHash": "sha256-tJV9ud8oM53jjhzcslcpy/4Ph+1LyksJaL/sKhtv9pk=",
+        "owner": "hanami",
+        "repo": "cli",
+        "rev": "b1386b024a9b6041be8ccf5ce41cdb99143b19e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hanami",
+        "repo": "cli",
+        "type": "github"
       }
     }
   },

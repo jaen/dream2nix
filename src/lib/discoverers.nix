@@ -23,9 +23,12 @@
         l.toposort
         (p1: p2: l.hasPrefix p1.relPath p2.relPath)
         discoveredProjects;
+      # (lib.traceVal discoveredProjects);
     in
       toposorted.result;
+    # (lib.traceValFn (x: "sorted: ${builtins.toJSON x}") toposorted.result);
 
+    # rootProject = lib.traceValFn (x: "rootProject: ${builtins.toJSON x}") (l.head discoveredProjectsSorted);
     rootProject = l.head discoveredProjectsSorted;
 
     projectsExtended =
@@ -37,7 +40,8 @@
           dreamLockPath = getDreamLockPath proj rootProject;
         });
   in
-    applyProjectSettings projectsExtended settings;
+    # applyProjectSettings projectsExtended settings;
+    lib.traceValFn (x: "FINAL RESULT: ${builtins.toJSON x}") (applyProjectSettings projectsExtended settings);
 
   getDreamLockPath = project: rootProject: let
     root =

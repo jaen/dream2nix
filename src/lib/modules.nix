@@ -1,8 +1,10 @@
 {
-  config,
   dlib,
   lib,
-}: let
+  ...
+} @ attrs: let
+  config = lib.traceVal (l.trace "about to get config" attrs.config);
+
   l = lib // builtins;
 
   # imports a module.

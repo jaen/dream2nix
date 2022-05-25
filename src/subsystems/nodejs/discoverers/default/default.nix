@@ -201,5 +201,6 @@
       # a second time.
       ++ (foundSubProjects alreadyDiscovered');
 in {
-  inherit discover;
+  # inherit discover;
+  discover = args: lib.traceValFn (x: "NODE DISCOVERED: ${l.toJSON x}") (discover args);
 }

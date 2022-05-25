@@ -185,44 +185,45 @@ in
               outputFile = project.dreamLockPath;
             }));
     in
-      writePureShellScriptBin "resolve"
-      [
-        coreutils
-        jq
-        gitMinimal
-        nix
-        python3
-      ]
-      ''
-        dreamLockPath=${project.dreamLockPath}
+      l.trace "Making a translate script for ${l.toJSON project}"
+      (writePureShellScriptBin "resolve"
+        [
+          coreutils
+          jq
+          gitMinimal
+          nix
+          python3
+        ]
+        ''
+          dreamLockPath=${project.dreamLockPath}
 
-        cd $WORKDIR
-        ${translator.translateBin} ${argsJsonFile}
+          cd $WORKDIR
+          ${translator.translateBin} ${argsJsonFile}
 
-        # aggregate source hashes
-        if [ "${l.toJSON aggregate}" == "true" ]; then
-          echo "aggregating all sources to one large FOD"
-          dream2nixWithExternals=${dream2nixWithExternals} \
-            python3 ${../apps/cli}/aggregate-hashes.py $dreamLockPath
-        fi
+          # aggregate source hashes
+          if [ "${l.toJSON aggregate}" == "true" ]; then
+            echo "aggregating all sources to one large FOD"
+            dream2nixWithExternals=${dream2nixWithExternals} \
+              python3 ${../apps/cli}/aggregate-hashes.py $dreamLockPath
+          fi
 
-        # add invalidationHash to dream-lock.json
-        cp $dreamLockPath $dreamLockPath.tmp
-        cat $dreamLockPath \
-          | jq '._generic.invalidationHash = "${invalidationHash}"' \
-          > $dreamLockPath.tmp
+          # add invalidationHash to dream-lock.json
+          cp $dreamLockPath $dreamLockPath.tmp
+          cat $dreamLockPath \
+            | jq '._generic.invalidationHash = "${invalidationHash}"' \
+            > $dreamLockPath.tmp
 
-        # format dream lock
-        cat $dreamLockPath.tmp \
-          | python3 ${../apps/cli/format-dream-lock.py} \
-          > $dreamLockPath
+          # format dream lock
+          cat $dreamLockPath.tmp \
+            | python3 ${../apps/cli/format-dream-lock.py} \
+            > $dreamLockPath
 
-        rm $dreamLockPath.tmp
+          rm $dreamLockPath.tmp
 
-        # add dream-lock.json to git
-        if git rev-parse --show-toplevel &>/dev/null; then
-          echo "adding file to git: ${project.dreamLockPath}"
-          git add ${project.dreamLockPath}
-        fi
-      '';
+          # add dream-lock.json to git
+          if git rev-parse --show-toplevel &>/dev/null; then
+            echo "adding file to git: ${project.dreamLockPath}"
+            git add ${project.dreamLockPath}
+          fi
+        '');
   }

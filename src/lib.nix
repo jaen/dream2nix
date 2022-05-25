@@ -117,10 +117,10 @@
         translator = project.translator;
       };
 
-    discoveredProjects = dlib.discoverers.discoverProjects {
+    discoveredProjects = l.traceVal (dlib.discoverers.discoverProjects {
       inherit settings;
       tree = dlib.prepareSourceTree {inherit source;};
-    };
+    });
 
     allBuilderOutputs =
       lib.mapAttrs
@@ -154,6 +154,7 @@
           dream2nix.utils.writePureShellScript
           []
           ''
+            echo "IMPURE SCRIPT DISCOVERED PROJECTS ${l.toJSON discoveredProjects}"
             cd $WORKDIR
             ${l.concatStringsSep "\n"
               (l.mapAttrsToList
